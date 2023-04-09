@@ -27,6 +27,7 @@ void removeSink(vector<vector<int>> &graph, vector<bool> &eliminated, vector<int
 // source affect other nodes' in-degree
 void removeSource(vector<vector<int>> &graph, vector<bool> &eliminated, vector<int> &indegree, int u)
 {
+    // cout << u << endl;
     for (int v : graph[u])
     {
         indegree[v]--;
@@ -59,10 +60,16 @@ vector<int> greedyfas(vector<vector<int>> &graph)
             {
                 has_sink = true;
                 eliminated[u] = true;
+                s2.push_back(u);
                 rest--;
                 removeSink(graph, eliminated, outdegree, u);
             }
         }
+        if (rest == 0)
+        {
+            break;
+        }
+
         // if (!has_sink)
         // {
         //     break;
@@ -76,6 +83,7 @@ vector<int> greedyfas(vector<vector<int>> &graph)
             {
                 has_source = true;
                 eliminated[u] = true;
+                s1.push_back(u);
                 rest--;
                 removeSource(graph, eliminated, indegree, u);
             }
@@ -84,7 +92,10 @@ vector<int> greedyfas(vector<vector<int>> &graph)
         // {
         //     break;
         // }
-
+        if (rest == 0)
+        {
+            break;
+        }
         int u_max = -1, delta_max = -1;
         for (int u = 0; u < n; u++)
         {
