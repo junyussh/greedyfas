@@ -30,7 +30,10 @@ void removeSource(vector<vector<int>> &graph, vector<bool> &eliminated, vector<i
     // cout << u << endl;
     for (int v : graph[u])
     {
-        indegree[v]--;
+        if (!eliminated[v])
+        {
+            indegree[v]--;
+        }
     }
 }
 vector<int> greedyfas(vector<vector<int>> &graph)
@@ -179,6 +182,17 @@ int main(int argc, char const *argv[])
         {0, 2},
         {3},
         {0, 1}};
+
+    vector<vector<int>> graph2 = {
+        {1, 2},
+        {2},
+        {3},
+        {4, 5, 6},
+        {6},
+        {4, 7},
+        {0},
+        {1, 2}
+    };
     vector<int> fas = greedyfas(graph);
     for (int u : fas)
     {
