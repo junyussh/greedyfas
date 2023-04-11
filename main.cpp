@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
+
 using namespace std;
 
 // Removing the sink affects the out-degree of other nodes
@@ -126,6 +128,23 @@ vector<int> greedyfas(vector<vector<int>> &graph)
 
     return s;
 }
+vector<vector<int>> readFromFile(const string filename)
+{
+    ifstream in(filename);
+    if (!in) {
+      std::cout << "Error open " << filename << "\n";
+      exit(1);
+    }
+    int num,u,v;
+    in >> num;
+    vector<vector<int>> graph(num);
+    while (in >> u >> v)
+    {
+        graph[u].push_back(v);
+    }
+    in.close();
+    return graph;
+}
 int main(int argc, char const *argv[])
 {
     vector<vector<int>> graph = {
@@ -144,6 +163,7 @@ int main(int argc, char const *argv[])
         {0},
         {1, 2}
     };
+    vector<vector<int>> graph3 = readFromFile("data/test.txt");
 
     vector<int> fas = greedyfas(graph);
 
