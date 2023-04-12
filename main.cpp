@@ -170,6 +170,36 @@ vector<pair<int, int>> LAtoFAS(vector<int> &la, const string filename)
     in.close();
     return fas;
 }
+void saveLAtofile(vector<int> &la, const string filename)
+{
+    ofstream out(filename);
+    for (int u : la)
+    {
+        out << u << " ";
+    }
+    out.close();
+}
+vector<int> readLAFromFile(const string filename)
+{
+    vector<int> la;
+    ifstream in(filename);
+    int u;
+    while (in >> u)
+    {
+        la.push_back(u);
+    }
+    in.close();
+    return la;
+}
+void saveFAStofile(vector<pair<int, int>> &fas, const string filename)
+{
+    ofstream out(filename);
+    for(auto [u,v] : fas)
+    {
+        out << u << " " << v << endl;
+    }
+    out.close();
+}
 int main(int argc, char const *argv[])
 {
     vector<vector<int>> graph = {
@@ -190,7 +220,11 @@ int main(int argc, char const *argv[])
     string filename = "data/test2.txt";
     vector<vector<int>> graph3 = readFromFile(filename);
     vector<int> la = greedyfas(graph3);
-    vector<pair<int, int>> fas3 = LAtoFAS(la, filename);
+    string la_filename = "data/test2_la.txt";
+    saveLAtofile(la, la_filename);
+    vector<int> lafromfile = readLAFromFile(la_filename);
+    vector<pair<int, int>> fas3 = LAtoFAS(lafromfile, filename);
+    saveFAStofile(fas3, "data/test2_fas.txt");
     for (auto [u, v] : fas3)
     {
         cout << u << "->" << v << endl;
