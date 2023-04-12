@@ -131,11 +131,12 @@ vector<int> greedyfas(vector<vector<int>> &graph)
 vector<vector<int>> readFromFile(const string filename)
 {
     ifstream in(filename);
-    if (!in) {
-      std::cout << "Error open " << filename << "\n";
-      exit(1);
+    if (!in)
+    {
+        std::cout << "Error open " << filename << "\n";
+        exit(1);
     }
-    int num,u,v;
+    int num, u, v;
     in >> num;
     vector<vector<int>> graph(num);
     while (in >> u >> v)
@@ -144,6 +145,30 @@ vector<vector<int>> readFromFile(const string filename)
     }
     in.close();
     return graph;
+}
+vector<pair<int, int>> LAtoFAS(vector<int> &la, const string filename)
+{
+    // save the order of nodes in LA
+    vector<int> orders(la.size());
+    for (int i = 0; i < la.size(); i++)
+    {
+        orders[la[i]] = i;
+    }
+    ifstream in(filename);
+    int num, u, v;
+    in >> num;
+    vector<pair<int, int>> fas;
+    // u -> v
+    while (in >> u >> v)
+    {
+        // find feedback arc
+        if (orders[u] > orders[v])
+        {
+            fas.push_back({u, v});
+        }
+    }
+    in.close();
+    return fas;
 }
 int main(int argc, char const *argv[])
 {
@@ -161,9 +186,15 @@ int main(int argc, char const *argv[])
         {6},
         {4, 7},
         {0},
-        {1, 2}
-    };
-    vector<vector<int>> graph3 = readFromFile("data/test.txt");
+        {1, 2}};
+    string filename = "data/test2.txt";
+    vector<vector<int>> graph3 = readFromFile(filename);
+    vector<int> la = greedyfas(graph3);
+    vector<pair<int, int>> fas3 = LAtoFAS(la, filename);
+    for (auto [u, v] : fas3)
+    {
+        cout << u << "->" << v << endl;
+    }
 
     vector<int> fas = greedyfas(graph);
 
@@ -171,7 +202,7 @@ int main(int argc, char const *argv[])
     {
         cout << u << " -> ";
     }
-    
+
     cout << endl;
 
     return 0;
